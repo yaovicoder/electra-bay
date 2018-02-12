@@ -1,0 +1,24 @@
+{
+  "name": "electra-bay",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Electra-project/Electra-Bay.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Electra-project/Electra-Bay/issues"
+  },
+  "homepage": "https://github.com/Electra-project/Electra-Bay#readme",
+  "dependencies": {
+    "electra-js": "0.0.2",
+    "lexpress": "^0.17.3"
+  }
+}
