@@ -1,30 +1,11 @@
 extends base.pug
 
 block body
-  nav(class='navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0')
-    a(class='navbar-brand col-sm-3 col-md-2 mr-0' href='/') Electra Bay
-    input(class='form-control form-control-dark w-100' type='text' placeholder='Search' aria-label='Search')
-    if me
-      ul(class='navbar-nav px-3')
-        li(class='nav-item text-nowrap')
-          a(class='nav-link' href='/logout')
-            svg(class='icon')
-              use(xlink:href='/sprites/open-iconic.svg#account-logout')
-    else
-      ul(class='navbar-nav px-3')
-        li(class='nav-item text-nowrap')
-          a(class='nav-link' href='/login')
-            img(class='icon' src='/svg/iconic-1.1.1/account-logout.svg')
+  include partials/navbar.pug
 
   div(class='container-fluid')
     div(class='row')
-      nav(class='col-md-2 d-none d-md-block bg-light sidebar')
-        div(class='sidebar-sticky')
-          ul(class='nav flex-column')
-            if categories
-              each category in categories
-                li(class='nav-item')
-                  a(class='nav-link' href='/c/'+category.slug) #{category.name}
+      include partials/sidebar.pug
 
       main(role='main' class='col-md-9 ml-sm-auto col-lg-10 pt-3 px-4')
         if me

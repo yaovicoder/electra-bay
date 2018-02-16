@@ -1,0 +1,14 @@
+nav(class='navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0')
+  a(class='navbar-brand col-sm-3 col-md-2 mr-0' href='/') Electra Bay
+  input(class='form-control form-control-dark w-100' type='text' placeholder='Search' aria-label='Search')
+  if me
+    ul(class='navbar-nav px-3')
+      li(class='nav-item text-nowrap')
+        a(class='nav-link' href='/logout')
+          svg(class='icon')
+            use(xlink:href='/sprites/open-iconic.svg#account-logout')
+  else
+    ul(class='navbar-nav px-3')
+      li(class='nav-item text-nowrap')
+        a(class='nav-link' href='/login')
+          img(class='icon' src='/svg/iconic-1.1.1/account-logout.svg')
