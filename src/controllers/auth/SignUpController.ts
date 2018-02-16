@@ -99,7 +99,6 @@ export default class SignUpController extends BaseController {
             user,
             key: generateRandomHex(),
             createdAt: new Date(),
-            updatedAt: new Date(),
           })
 
           userActivationKeyModel.save((err: Error, userActivationKey: UserActivationKey) => {
