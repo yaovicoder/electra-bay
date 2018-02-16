@@ -41,19 +41,7 @@ const lexpress: Lexpress = new Lexpress(process.env.NODE_ENV === 'development'
       },
     }
   }
-  : {
-    ...commonConfig,
-    ...{
-      middlewares: [
-        passport.initialize(),
-        passport.session(),
-        connectFlash(),
-      ],
-      notFoundmiddleware: notFound,
-      routes,
-      staticPath: 'public',
-    }
-  }
+  : commonConfig
 )
 
 lexpress.start()
