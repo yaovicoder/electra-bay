@@ -28,25 +28,32 @@ const commonConfig: LexpressOptions = {
   viewsPath: 'src/views',
 }
 
-const devConfig: Partial<LexpressOptions> = {
-  https: {
-    cert: fs.readFileSync(path.resolve('./server.crt')),
-    key: fs.readFileSync(path.resolve('./server.key')),
-    requestCert: false,
-    rejectUnauthorized: false
-  },
-}
-
-const prodConfig: Partial<LexpressOptions> = {
-  headers: {
-    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-    'Access-Control-Allow-Origin': process.env.BASE_URL,
-  },
-}
-
 const lexpress: Lexpress = new Lexpress(process.env.NODE_ENV === 'development'
-  ? { ...commonConfig, ...devConfig }
-  : { ...commonConfig, ...prodConfig }
+  ? {
+    ...commonConfig,
+    ...{
+      https: {
+        cert: fs.readFileSync(path.resolve('./server.crt')),
+        key: fs.readFileSync(path.resolve('./server.key')),
+        requestCert: false,
+        rejectUnauthorized: false
+      },
+    }
+  }
+  : {
+    ...commonConfig,
+    ...{
+      middlewares: [
+        passport.initialize(),
+        passport.session(),
+        connectFlash(),
+      ],
+      notFoundmiddleware: notFound,
+      routes,
+      staticPath: 'public',
+      viewsPath: 'src/views',
+    }
+  }
 )
 
 lexpress.start()
