@@ -2,7 +2,7 @@ extends ../layout.pug
 
 block content
   h1 Log In
-  form(method='post' action='/login' novalidate)
+  form(class='mt-3' method='post' action='/login' novalidate)
     div(class='form-group')
       label(for='username') Public Username
       input(
@@ -43,6 +43,6 @@ block content
     //-   )
     //-   label(class='form-check-label' for='rememberMe') Remember Me
 
-    div(class='d-flex justify-content-between mt-3')
+    div(class='d-flex justify-content-between mt-4')
       button(type='submit' class='btn btn-primary') Log In
       a(href='/signup' class='btn btn-info') Create an account
