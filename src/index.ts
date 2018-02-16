@@ -17,10 +17,6 @@ passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
 const commonConfig: LexpressOptions = {
-  // headers: {
-  //   'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-  //   'Access-Control-Allow-Origin': 'https://electra-bay.herokuapp.com',
-  // },
   middlewares: [
     passport.initialize(),
     passport.session(),
@@ -41,9 +37,16 @@ const devConfig: Partial<LexpressOptions> = {
   },
 }
 
+const prodConfig: Partial<LexpressOptions> = {
+  headers: {
+    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+    'Access-Control-Allow-Origin': process.env.BASE_URL,
+  },
+}
+
 const lexpress: Lexpress = new Lexpress(process.env.NODE_ENV === 'development'
   ? { ...commonConfig, ...devConfig }
-  : commonConfig
+  : { ...commonConfig, ...prodConfig }
 )
 
 lexpress.start()
