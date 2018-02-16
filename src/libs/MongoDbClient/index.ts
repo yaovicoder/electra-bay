@@ -62,6 +62,29 @@ export default class MongoDbClient {
     })
   }
 
+  public async findByIdAndUpdate<T extends mongoose.Document>(modelName: keyof Models, id: any): Promise<T[]> {
+    if (!clientIsConnected) {
+      const [err] = await to(this.connect())
+      if (err !== null) return Promise.reject(err)
+    }
+
+    // tslint:disable-next-line:variable-name
+    const Model: mongoose.Model<mongoose.Document> = MODELS[modelName]
+
+    return new Promise<T[]>((resolve: (result: T[]) => void, reject: (err: Error) => void): void => {
+      Model.findByIdAndUpdate(id, (err: Error, res: T[]) => {
+        if (err !== null) {
+          log.err(err.message)
+          reject(new Error(`libs/MongoDbClient: Model.findByIdAndUpdate() failed.`))
+
+          return
+        }
+
+        resolve(res)
+      })
+    })
+  }
+
   public async findOne<T extends mongoose.Document>(modelName: keyof Models, conditions: any = {}): Promise<T> {
     if (!clientIsConnected) {
       const [err] = await to(this.connect())
