@@ -3,7 +3,7 @@ extends ../layout.pug
 block content
   h1 Create an account
 
-  form(method='post' action='/signup' novalidate)
+  form(class='mt-3' method='post' action='/signup' novalidate)
     div(class='form-group')
       label(for='username') Public Username
       input(
