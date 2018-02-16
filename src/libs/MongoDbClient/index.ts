@@ -62,7 +62,11 @@ export default class MongoDbClient {
     })
   }
 
-  public async findByIdAndUpdate<T extends mongoose.Document>(modelName: keyof Models, id: any, data: T): Promise<T> {
+  public async findByIdAndUpdate<T extends mongoose.Document>(
+    modelName: keyof Models,
+    id: any,
+    data: Partial<T>
+  ): Promise<T> {
     if (!clientIsConnected) {
       const [err] = await to(this.connect())
       if (err !== null) return Promise.reject(err)
