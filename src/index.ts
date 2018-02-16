@@ -25,6 +25,7 @@ const commonConfig: LexpressOptions = {
   notFoundmiddleware: notFound,
   routes,
   staticPath: 'public',
+  viewsEngine: 'pug',
   viewsPath: 'src/views',
 }
 
@@ -51,7 +52,6 @@ const lexpress: Lexpress = new Lexpress(process.env.NODE_ENV === 'development'
       notFoundmiddleware: notFound,
       routes,
       staticPath: 'public',
-      viewsPath: 'src/views',
     }
   }
 )
