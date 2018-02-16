@@ -1,0 +1,73 @@
+extends ../layout.pug
+
+block content
+  h1 Create an account
+
+  form(method='post' action='/signup' novalidate)
+    div(class='form-group')
+      label(for='username') Public Username
+      input(
+        autocapitalize='off'
+        autocomplete='username'
+        autocorrect='off'
+        class=`form-control${errors && errors.username ? ' is-invalid' : ''}`
+        id='username'
+        name='username'
+        placeholder='Username'
+        spellcheck='false'
+        type='text'
+        value=values && values.username ? values.username : ''
+      )
+      if errors && errors.username
+        div(class='invalid-feedback') #{errors.username}
+
+    div(class='form-group')
+      label(for='username') Email
+      input(
+        aria-describedby=errors && errors.email ? '' : 'emailHelp'
+        autocapitalize='off'
+        autocomplete='email'
+        autocorrect='off'
+        class=`form-control${errors && errors.email ? ' is-invalid' : ''}`
+        id='email'
+        name='email'
+        placeholder='Email'
+        spellcheck='false'
+        type='email'
+        value=values && values.email ? values.email : ''
+      )
+      if errors && errors.email
+        div(class='invalid-feedback') #{errors.email}
+      else
+        small(id='emailHelp' class='form-text text-muted').
+          We'll never share your email with anyone else.
+
+    div(class='form-group')
+      label(for='password') Password
+      input(
+        autocomplete='new-password'
+        class=`form-control${errors && errors.password ? ' is-invalid' : ''}`
+        id='password'
+        name='password'
+        placeholder='Password'
+        type='password'
+        value=values && values.password ? values.password : ''
+      )
+      if errors && errors.password
+        div(class='invalid-feedback') #{errors.password}
+
+    div(class='form-group')
+      label(for='passwordBis') Password (repeat)
+      input(
+        autocomplete='new-password'
+        class=`form-control${errors && errors.passwordBis ? ' is-invalid' : ''}`
+        id='passwordBis'
+        name='passwordBis'
+        placeholder='Password (repeat)'
+        type='password'
+        value=values && values.passwordBis ? values.passwordBis : ''
+      )
+      if errors && errors.passwordBis
+        div(class='invalid-feedback') #{errors.passwordBis}
+
+    button(type='submit' class='btn btn-primary mt-3') Create my account

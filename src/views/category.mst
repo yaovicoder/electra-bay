@@ -1,5 +1,0 @@
-{{> base-top}}
-
-<h1>{{category.name}}</h1>
-
-{{> base-bottom}}

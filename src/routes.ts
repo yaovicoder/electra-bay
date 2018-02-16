@@ -1,10 +1,10 @@
 import { Route } from 'lexpress'
 import * as passport from 'passport'
 
-import CategoryController from './controllers/website/CategoryController'
-import HomeController from './controllers/website/HomeController'
-import ItemController from './controllers/website/ItemController'
-import UserController from './controllers/website/UserController'
+import CategoryController from './controllers/web/CategoryController'
+import HomeController from './controllers/web/HomeController'
+import ItemController from './controllers/web/ItemController'
+import UserController from './controllers/web/UserController'
 
 import ActivateController from './controllers/auth/ActivateController'
 import LogInController from './controllers/auth/LogInController'
@@ -32,7 +32,7 @@ const routes: Route[] = [
     controller: CategoryController,
   },
   {
-    path: '/p/:itemSlug',
+    path: '/i/:itemSlug',
     method: 'get',
     controller: ItemController,
   },

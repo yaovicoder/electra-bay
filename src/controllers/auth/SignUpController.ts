@@ -28,7 +28,7 @@ const PASSWORD_LENGTH_MIN: number = 12
 
 export default class SignUpController extends BaseController {
   public get(): void {
-    this.render('signup')
+    this.render('auth/signup')
   }
 
   public post(): void {
@@ -56,7 +56,7 @@ export default class SignUpController extends BaseController {
       errors.passwordBis = 'Your repeated password is different from the first one.'
     }
 
-    if (!R.equals(errors, {})) return this.render('signup', { errors, values: this.req.body })
+    if (!R.equals(errors, {})) return this.render('auth/signup', { errors, values: this.req.body })
 
     this.db.find<User>('User', {
       $or: [
@@ -77,7 +77,7 @@ export default class SignUpController extends BaseController {
           }
         }
 
-        if (!R.equals(errors, {})) return this.render('signup', { errors, values: this.req.body })
+        if (!R.equals(errors, {})) return this.render('auth/signup', { errors, values: this.req.body })
 
         const userModel: User = new UserModel({
           username,

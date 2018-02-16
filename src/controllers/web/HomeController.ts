@@ -15,7 +15,7 @@ export default class HomeController extends BaseController {
     this.db.find<Category>('Category', {
       parent: null
     })
-      .then((categories: Category[]) => this.renderWithCache('home'))
+      .then((categories: Category[]) => this.renderWithCache('web/home'))
       .catch(this.answerError)
   }
 }

@@ -1,0 +1,48 @@
+extends ../layout.pug
+
+block content
+  h1 Log In
+  form(method='post' action='/login' novalidate)
+    div(class='form-group')
+      label(for='username') Public Username
+      input(
+        autocapitalize='off'
+        autocomplete='username'
+        autocorrect='off'
+        class=`form-control${errors && errors.username ? ' is-invalid' : ''}`
+        id='username'
+        name='username'
+        placeholder='Username'
+        spellcheck='false'
+        type='text'
+        value=values && values.username ? values.username : ''
+      )
+      if errors && errors.username
+        div(class='invalid-feedback') #{errors.username}
+
+    div(class='form-group')
+      label(for='password') Password
+      input(
+        autocomplete='current-password'
+        class=`form-control${errors && errors.password ? ' is-invalid' : ''}`
+        id='password'
+        name='password'
+        placeholder='Password'
+        type='password'
+        value=values && values.password ? values.password : ''
+      )
+      if errors && errors.password
+        div(class='invalid-feedback') #{errors.password}
+
+    //- div(class='form-check')
+    //-   input(
+    //-     class='form-check-input'
+    //-     id='rememberMe'
+    //-     name='rememberMe'
+    //-     type='checkbox'
+    //-   )
+    //-   label(class='form-check-label' for='rememberMe') Remember Me
+
+    div(class='d-flex justify-content-between mt-3')
+      button(type='submit' class='btn btn-primary') Log In
+      a(href='/signup' class='btn btn-info') Create an account

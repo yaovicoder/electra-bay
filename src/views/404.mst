@@ -1,5 +1,0 @@
-{{> base-top}}
-
-<h1>Not Found</h1>
-
-{{> base-bottom}}

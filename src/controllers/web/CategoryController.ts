@@ -21,7 +21,7 @@ export default class CategoryController extends BaseController {
           this.db.find<Category>('Category', { parent: category._id }),
           this.db.find<Item>('Item', { category: category._id }),
         ])
-          .then((res: [Category[], Item[]]) => this.renderWithCache('category', {
+          .then((res: [Category[], Item[]]) => this.renderWithCache('web/category', {
             category,
             items: res[1],
             // tslint:disable-next-line:no-magic-numbers

@@ -1,0 +1,14 @@
+extends ../layout.pug
+
+block content
+  h1 Account Activation
+  if error
+    div(class='alert alert-warning' role='alert')
+      h4(class='alert-heading') Oops…
+      p #{error}
+  else
+    div(class='alert alert-success' role='alert')
+      h4(class='alert-heading') Welcome to the Electra community !
+      p We are one big happy family and hope to see your trades soon.
+      hr
+      p Don't forget that's each listing costs only 1 ECA ;)

@@ -1,0 +1,36 @@
+extends ../layout.pug
+
+block content
+  h1 List a new item
+  form(method='post' action='/login' novalidate autocomplete='off')
+    div(class='form-group')
+      label(for='name') Name
+      input(
+        autocapitalize='off'
+        autocorrect='off'
+        class=`form-control${errors && errors.name ? ' is-invalid' : ''}`
+        id='name'
+        name='name'
+        placeholder='Username'
+        spellcheck='false'
+        type='text'
+        value=values && values.name ? values.name : ''
+      )
+      if errors && errors.name
+        div(class='invalid-feedback') #{errors.name}
+
+    div(class='form-group')
+      label(for='price') Price
+      input(
+        class=`form-control${errors && errors.price ? ' is-invalid' : ''}`
+        id='price'
+        name='price'
+        placeholder='Price'
+        spellcheck='false'
+        type='number'
+        value=values && values.price ? values.price : ''
+      )
+      if errors && errors.price
+        div(class='invalid-feedback') #{errors.price}
+
+    button(type='submit' class='btn btn-primary mt-3') Publish
