@@ -44,7 +44,7 @@
     "dotenv": "^5.0.0",
     "electra-js": "0.0.2",
     "email-validator": "^1.1.1",
-    "lexpress": "^0.34.2",
+    "lexpress": "^0.34.3",
     "mongodb": "^3.0.2",
     "mongoose": "^5.0.5",
     "nodemon": "^1.14.12",
