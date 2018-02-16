@@ -7,6 +7,8 @@ export interface UserActivationKey extends Document {
   updatedAt: Date
 }
 
+const ONE_WEEK_IN_SECONDS: number = 604800
+
 export default model<UserActivationKey>('UserActivationKey', new Schema({
   user: {
     type: Schema.Types.ObjectId,
@@ -20,9 +22,6 @@ export default model<UserActivationKey>('UserActivationKey', new Schema({
   createdAt: {
     type: Date,
     required: true,
-  },
-  updatedAt: {
-    type: Date,
-    required: true,
+    expires: ONE_WEEK_IN_SECONDS,
   },
 }))
