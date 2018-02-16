@@ -59,7 +59,8 @@
     "typescript": "^2.7.1",
     "uuid": "^3.2.1",
     "webpack": "^3.11.0",
-    "webpack-merge": "^4.1.1"
+    "webpack-merge": "^4.1.1",
+    "webpack-node-externals": "^1.6.0"
   },
   "devDependencies": {
     "@types/mocha": "^2.2.48",
