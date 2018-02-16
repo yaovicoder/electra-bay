@@ -41,7 +41,15 @@ const lexpress: Lexpress = new Lexpress(process.env.NODE_ENV === 'development'
       },
     }
   }
-  : commonConfig
+  : {
+    ...commonConfig,
+    ...{
+      headers: {
+        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+        'Access-Control-Allow-Origin': process.env.BASE_URL,
+      },
+    }
+  }
 )
 
 lexpress.start()
