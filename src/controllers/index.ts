@@ -42,6 +42,6 @@ export default class BaseController extends lexpress.BaseController {
         flash: R.equals(flash, {}) ? undefined : flash,
         me: this.req.user
       }))
-      // .catch(this.answerError)
+      .catch(this.answerError)
   }
 }
