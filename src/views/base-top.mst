@@ -1,0 +1,51 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electra Bay</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.0.0/lux/bootstrap.min.css">
+</head>
+<body>
+  <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/">Electra Bay</a>
+    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+    {{#me}}
+      <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+          <a class="nav-link" href="/logout">
+            <svg class="icon"><use xlink:href="/sprites/open-iconic.svg#account-logout"></use></svg>
+          </a>
+        </li>
+      </ul>
+    {{/me}}
+    {{^me}}
+      <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+          <a class="nav-link" href="/login">
+            <svg class="icon"><use xlink:href="/sprites/open-iconic.svg#account-login"></use></svg>
+          </a>
+        </li>
+      </ul>
+    {{/me}}
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <div class="sidebar-sticky">
+          <ul class="nav flex-column">
+            {{#categories}}
+              <li class="nav-item">
+                <a class="nav-link" href="/c/{{slug}}">{{name}}</a>
+              </li>
+            {{/categories}}
+          </ul>
+      </nav>
+
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+        {{#me}}{{^me.isActivated}}
+            <div class="alert alert-warning" role="alert">
+              An email has been sent to <strong>{{me.email}}</strong>. Please check your mailbox to activate your account !
+            </div>
+        {{/me.isActivated}}{{/me}}

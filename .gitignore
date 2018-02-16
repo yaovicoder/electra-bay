@@ -1,1 +1,9 @@
+/build
 /node_modules
+
+*.crt
+*.csr
+*.key
+
+.DS_Store
+.env

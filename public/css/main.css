@@ -1,0 +1,13 @@
+/* Global */
+.icon {
+  height: 1rem;
+  width: 1rem;
+}
+
+/* Top Navignation Bar */
+.navbar-nav .nav-item {
+  margin-right: 0;
+}
+.navbar-nav .icon {
+  fill: #ffffff;
+}

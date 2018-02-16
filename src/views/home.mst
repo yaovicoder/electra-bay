@@ -1,0 +1,5 @@
+{{> base-top}}
+
+<h1>Home</h1>
+
+{{> base-bottom}}
