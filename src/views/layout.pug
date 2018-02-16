@@ -11,7 +11,7 @@ block body
         if me
           if !me.isActivated
             div(class='alert alert-warning' role='alert').
-              An email has been sent to #[strong me.email]</strong>.
+              An email has been sent to #[strong #{me.email}]</strong>.
               Please check your mailbox to activate your account !
 
         block content
