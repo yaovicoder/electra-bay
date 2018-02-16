@@ -12,7 +12,8 @@
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "build:dev": "webpack --config webpack.dev.js",
-    "start": "npm run build && node build/index.js",
+    "postinstall": "npm run build",
+    "start": "node build/index.js",
     "start:dev": "npm run watch",
     "test": "mocha -r ts-node/register src/**/*.spec.ts",
     "validate": "npm run validate:lint && npm run validate:tsc",
