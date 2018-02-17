@@ -5,16 +5,19 @@ export interface Category extends Document {
   name: string
   slug: string
   position: number
-  depth: number
   createdAt: Date
   updatedAt: Date
 }
 
-export type CategoryTree = Array<{
+export interface CategoryTreeBranch {
+  id: string
+  parent: string | null
   name: string
   slug: string
-  children: CategoryTree
-}>
+  position: number
+  depth: number | undefined
+  children: CategoryTreeBranch[]
+}
 
 export default model<Category>('Category', new Schema({
   parent: {
