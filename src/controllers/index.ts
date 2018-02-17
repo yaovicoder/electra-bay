@@ -50,7 +50,7 @@ export default class BaseController extends lexpress.BaseController {
     if (categories === undefined) {
       const categoryDocuments: Category[] = await this.db.find<Category>('Category')
 
-      return categoryDocuments.map((category: Category): CategoryTreeBranch => ({
+      const categories: CategoryTreeBranch[] = categoryDocuments.map((category: Category) => ({
         id: category._id.toString(),
         parent: category.parent === undefined ? undefined : category.parent.toString(),
         name: category.name,
@@ -59,25 +59,36 @@ export default class BaseController extends lexpress.BaseController {
         depth: category.parent === undefined ? 0 : undefined,
         children: [],
       }))
+
+      return this.getCategoriesTree(categories)
     }
 
     if (categories.filter((category: CategoryTreeBranch) => category.depth === undefined).length === 0) {
       return this.sortByPosition(categories.filter((category: CategoryTreeBranch) => category.depth === 0))
     }
 
+    const newChildrenIds: string[] = []
+    const nextDepth: number = depth + 1
+
+    const categoriesWithNewChildren: CategoryTreeBranch[] = categories.map((category: CategoryTreeBranch) => {
+      if (category.depth !== depth) return category
+
+      category.children = this.sortByPosition(
+        categories
+          .filter((childCategory: CategoryTreeBranch) => childCategory.parent === category.id)
+          .map((childCategory: CategoryTreeBranch) => {
+            newChildrenIds.push(childCategory.id)
+
+            return { ...childCategory, ...{ depth: nextDepth } }
+          })
+      )
+
+      return category
+    })
+
     return this.getCategoriesTree(
-      categories.map((category: CategoryTreeBranch) => {
-        if (category.depth !== depth) return category
-
-        category.children = this.sortByPosition(
-          categories
-            .filter((childCategory: CategoryTreeBranch) => childCategory.parent === category.id)
-            .map((childCategory: CategoryTreeBranch) => ({ ...childCategory, ...{ depth: depth + 1 } }))
-        )
-
-        return category
-      }),
-      depth + 1
+      categoriesWithNewChildren.filter(({ id }: CategoryTreeBranch) => !newChildrenIds.includes(id)),
+      nextDepth
     )
   }
 
