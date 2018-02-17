@@ -1,13 +1,14 @@
 mixin getCategoryList(categories, categoryCurrentChain)
-  //- ul(class='nav flex-column')
   ul
     each category in categories
-      //- li(class='nav-item')
       li
-        a(class='nav-link' href='/c/'+category.slug) #{category.name}
+        if (category.depth !== 0)
+          svg
+            use(xlink:href='/sprites/open-iconic.svg#plus')
+        a(href='/c/'+category.slug) #{category.name}
         if (categoryCurrentChain !== undefined && categoryCurrentChain.includes(category.id))
           +getCategoryList(category.children, categoryCurrentChain)
 
-nav(class='col-md-2 d-none d-md-block bg-light sidebar')
-  div(class='sidebar-sticky')
+nav(class='col-md-3 d-none d-md-block bg-light sidebar')
+  div(class='sidebar-sticky mt-2 sidebar__categoryList')
     +getCategoryList(categories, categoryCurrentChain)
