@@ -4,8 +4,8 @@ mixin getCategoryList(categories, categoryCurrentChain)
     each category in categories
       //- li(class='nav-item')
       li
-        a(class='nav-link' href='/c/'+category.slug) #{category.depth} #{category.position} #{category.name}
-        if (categoryCurrentChain.includes(category.id))
+        a(class='nav-link' href='/c/'+category.slug) #{category.name}
+        if (categoryCurrentChain !== undefined && categoryCurrentChain.includes(category.id))
           +getCategoryList(category.children, categoryCurrentChain)
 
 nav(class='col-md-2 d-none d-md-block bg-light sidebar')
