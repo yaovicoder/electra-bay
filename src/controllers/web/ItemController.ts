@@ -7,7 +7,7 @@ export default class ItemController extends BaseController {
     this.db.findOne<Item>('Item', {
       slug: this.req.params.itemSlug
     })
-      .then((item: Item) => this.renderWithCache('web/item', { item }))
+      .then((item: Item) => this.render('web/item', { item }))
       .catch(this.answerError)
   }
 }

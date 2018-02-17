@@ -7,7 +7,7 @@ export default class UserController extends BaseController {
     this.db.findOne<User>('User', {
       slug: this.req.params.userSlug
     })
-      .then((user: User) => this.renderWithCache('web/user', { user }))
+      .then((user: User) => this.render('web/user', { user }))
       .catch(this.answerError)
   }
 }

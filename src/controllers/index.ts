@@ -5,7 +5,6 @@ import MongoDbClient from '../libs/MongoDbClient'
 import RedisClient from '../libs/RedisClient'
 import { Category, CategoryTreeBranch } from '../models/Category'
 
-const DEFAULT_CACHE_EXPIRATION_IN_SECONDS: number = 1
 const ONE_DAY_IN_SECONDS: number = 86400
 
 export default class BaseController extends lexpress.BaseController {
@@ -24,24 +23,6 @@ export default class BaseController extends lexpress.BaseController {
         me: this.req.user
       }))
       // .catch(this.answerError)
-  }
-
-  protected renderWithCache(
-    view: string,
-    // tslint:disable-next-line:ban-types
-    options: any = {},
-    cacheForInSeconds: number = DEFAULT_CACHE_EXPIRATION_IN_SECONDS
-  ): void {
-    const flash: {} = this.req.flash()
-
-    this.getCategories()
-      .then((categories: CategoryTreeBranch[]) => this.res.cache(cacheForInSeconds).render(view, {
-        ...options,
-        categories,
-        flash: R.equals(flash, {}) ? undefined : flash,
-        me: this.req.user
-      }))
-      .catch(this.answerError)
   }
 
   protected async getCategories(): Promise<CategoryTreeBranch[]> {
