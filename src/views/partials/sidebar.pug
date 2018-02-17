@@ -1,7 +1,13 @@
+mixin getCategoryList(categories, categoryCurrentChain)
+  //- ul(class='nav flex-column')
+  ul
+    each category in categories
+      //- li(class='nav-item')
+      li
+        a(class='nav-link' href='/c/'+category.slug) #{category.depth} #{category.position} #{category.name}
+        if (categoryCurrentChain.includes(category.id))
+          +getCategoryList(category.children, categoryCurrentChain)
+
 nav(class='col-md-2 d-none d-md-block bg-light sidebar')
   div(class='sidebar-sticky')
-    ul(class='nav flex-column')
-      if categories
-        each category in categories
-          li(class='nav-item')
-            a(class='nav-link' href='/c/'+category.slug) #{category.name}
+    +getCategoryList(categories, categoryCurrentChain)
