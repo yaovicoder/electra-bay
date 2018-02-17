@@ -10,6 +10,12 @@ export interface Category extends Document {
   updatedAt: Date
 }
 
+export type CategoryTree = Array<{
+  name: string
+  slug: string
+  children: CategoryTree
+}>
+
 export default model<Category>('Category', new Schema({
   parent: {
     type: Schema.Types.ObjectId,
