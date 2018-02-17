@@ -15,7 +15,7 @@ export default class BaseController extends lexpress.BaseController {
   protected render(view: string, options: any = {}): void {
     const flash: {} = this.req.flash()
 
-    this.getCategories()
+    this.getCategoriesTree()
       .then((categories: CategoryTreeBranch[]) => this.res.render(view, {
         ...options,
         categories,
@@ -25,25 +25,40 @@ export default class BaseController extends lexpress.BaseController {
       .catch(this.answerError)
   }
 
-  protected async getCategories(): Promise<CategoryTreeBranch[]> {
-    const categories: CategoryTreeBranch[] | undefined = await this.redis.cache<CategoryTreeBranch[]>('categories')
+  protected async getCategories(): Promise<Category[]> {
+    const categories: Category[] = await this.redis.cache<Category[]>('categories')
 
     if (categories !== undefined) return categories
 
-    return this.cacheCategoriesTree()
+    return this.cacheCategories()
   }
 
-  protected async cacheCategoriesTree(): Promise<CategoryTreeBranch[]> {
-    const categories: CategoryTreeBranch[] = await this.getCategoriesTree()
+  protected async cacheCategories(): Promise<Category[]> {
+    const categories: Category[] = await this.db.find<Category>('Category')
     await this.redis.cache('categories', categories, ONE_DAY_IN_SECONDS)
 
     return categories
   }
 
+  protected async getCategoriesTree(): Promise<CategoryTreeBranch[]> {
+    const categoriesTree: CategoryTreeBranch[] = await this.redis.cache<CategoryTreeBranch[]>('categoriesTree')
+
+    if (categoriesTree !== undefined) return categoriesTree
+
+    return this.cacheCategoriesTree()
+  }
+
+  protected async cacheCategoriesTree(): Promise<CategoryTreeBranch[]> {
+    const categoriesTree: CategoryTreeBranch[] = await this.generateCategoriesTree()
+    await this.redis.cache('categoriesTree', categoriesTree, ONE_DAY_IN_SECONDS)
+
+    return categoriesTree
+  }
+
   /**
    * Transform the MongoDB Category collection into an ordered tree.
    */
-  protected async getCategoriesTree(
+  protected async generateCategoriesTree(
     categories?: CategoryTreeBranch[],
     depth: number = 0
   ): Promise<CategoryTreeBranch[]> {
@@ -60,7 +75,7 @@ export default class BaseController extends lexpress.BaseController {
         children: [],
       }))
 
-      return this.getCategoriesTree(categories)
+      return this.generateCategoriesTree(categories)
     }
 
     if (categories.filter((category: CategoryTreeBranch) => category.depth === undefined).length === 0) {
@@ -86,7 +101,7 @@ export default class BaseController extends lexpress.BaseController {
       return category
     })
 
-    return this.getCategoriesTree(
+    return this.generateCategoriesTree(
       categoriesWithNewChildren.filter(({ id }: CategoryTreeBranch) => !newChildrenIds.includes(id)),
       nextDepth
     )
