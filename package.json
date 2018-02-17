@@ -12,6 +12,7 @@
   "scripts": {
     "build": "webpack --config webpack.prod.js",
     "build:dev": "webpack --config webpack.dev.js",
+    "clear:cache": "node tasks/redisFlushAll",
     "postinstall": "npm run build",
     "start": "node build/index.js",
     "start:dev": "npm run watch",
