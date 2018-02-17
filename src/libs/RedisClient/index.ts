@@ -11,17 +11,16 @@ dotenv.config()
 
 const client: redis.RedisClient = redis.createClient({ url: process.env.REDIS_URL })
 
-// tslint:disable-next-line:no-unnecessary-class
 export default class RedisClient {
-  public static get client(): redis.RedisClient {
+  public get client(): redis.RedisClient {
     return client
   }
 
-  public static get: (key: string) => Promise<string> = promisify(client.get).bind(client)
-  public static set: (key: string, value: string) => Promise<string> = promisify(client.set).bind(client)
-  public static expire: (key: string, seconds: number) => Promise<string> = promisify(client.expire).bind(client)
+  public get: (key: string) => Promise<string> = promisify(client.get).bind(client)
+  public set: (key: string, value: string) => Promise<string> = promisify(client.set).bind(client)
+  public expire: (key: string, seconds: number) => Promise<string> = promisify(client.expire).bind(client)
 
-  public static async cache(
+  public async cache(
     key: string,
     value?: CacheValue,
     forInSeconds?: number
