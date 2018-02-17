@@ -11,6 +11,11 @@ dotenv.config()
 
 const client: redis.RedisClient = redis.createClient({ url: process.env.REDIS_URL })
 
+export default interface RedisClient {
+  cache<T extends CacheValue>(key: string): Promise<T | undefined>
+  cache<T extends CacheValue>(key: string, value: T, forInSeconds: number): Promise<void>
+}
+
 export default class RedisClient {
   public get client(): redis.RedisClient {
     return client
@@ -20,11 +25,8 @@ export default class RedisClient {
   public set: (key: string, value: string) => Promise<string> = promisify(client.set).bind(client)
   public expire: (key: string, seconds: number) => Promise<string> = promisify(client.expire).bind(client)
 
-  public async cache(
-    key: string,
-    value?: CacheValue,
-    forInSeconds?: number
-  ): Promise<CacheValue | void | undefined> {
+  // tslint:disable-next-line:typedef
+  public async cache<T extends CacheValue>(key: string, value?: T, forInSeconds?: number) {
     if (value !== undefined) {
       if (forInSeconds === undefined) throw new Error(`RedisClient#cache(): The forInSeconds param must be set.`)
       if (forInSeconds <= 0) throw new Error(`RedisClient#cache(): The forInSeconds param must be greater than 0.`)
@@ -59,7 +61,7 @@ export default class RedisClient {
       }
       catch (err) { throw err }
 
-      return
+      return void 0
     }
 
     const [err, valueString] = await to(this.get(key))
@@ -69,16 +71,16 @@ export default class RedisClient {
 
     switch (valueString[0]) {
       case 'b':
-        return Boolean(Number(valueString.substr(1)))
+        return Boolean(Number(valueString.substr(1))) as T
 
       case 'n':
-        return Number(valueString.substr(1))
+        return Number(valueString.substr(1)) as T
 
       case 'o':
-        return JSON.parse(valueString.substr(1))
+        return JSON.parse(valueString.substr(1)) as T
 
       case 's':
-        return valueString.substr(1)
+        return valueString.substr(1) as T
 
       default:
         throw new Error(`RedisClient#cache(): We couldn't guess the value type.`)
