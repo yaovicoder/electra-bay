@@ -6,9 +6,40 @@ mixin getCategoryList(categories, categoryCurrentChain)
           svg
             use(xlink:href='/sprites/open-iconic.svg#plus')
         a(href='/c/'+category.slug) #{category.name}
+
         if (categoryCurrentChain !== undefined && categoryCurrentChain.includes(category.id))
           +getCategoryList(category.children, categoryCurrentChain)
+
+//- ---
 
 nav(class='col-md-3 d-none d-md-block bg-light sidebar')
   div(class='sidebar-sticky mt-2 sidebar__categoryList')
     +getCategoryList(categories, categoryCurrentChain)
+
+  if (me !== undefined)
+    hr
+    p(class='h4') My Account
+    ul(class='list-unstyled')
+      li
+        a(href=`/u/${me.slug}/listings`) My Listings
+      li
+        a(href=`/u/${me.slug}/orders`) My Orders
+      li
+        a(href=`/u/${me.slug}/profile`) My Profile
+      li
+        a(href=`/u/${me.slug}/addresses`) My Addresses
+      li
+        a(href=`/u/${me.slug}/email-and-password`) My email and password
+      li
+        a(href=`/u/${me.slug}/delete`) Delete my account
+
+    if (me.isManager)
+      hr
+      p(class='h4') Administration
+      ul(class='list-unstyled')
+        li
+          a(href='/a/categories') Categories
+
+  hr
+  p(class='text-center')
+    small= version
