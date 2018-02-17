@@ -6,6 +6,8 @@ import RedisClient from '../libs/RedisClient'
 import { Category, CategoryTreeBranch } from '../models/Category'
 
 const ONE_DAY_IN_SECONDS: number = 86400
+// tslint:disable-next-line:no-require-imports no-var-requires
+const VERSION: string = require('../../package.json').version
 
 export default class BaseController extends lexpress.BaseController {
   protected db: MongoDbClient = new MongoDbClient()
@@ -20,7 +22,8 @@ export default class BaseController extends lexpress.BaseController {
         ...options,
         categories,
         flash: R.equals(flash, {}) ? undefined : flash,
-        me: this.req.user
+        me: this.req.user,
+        version: VERSION
       }))
       .catch(this.answerError)
   }
