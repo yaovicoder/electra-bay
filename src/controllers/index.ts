@@ -22,7 +22,7 @@ export default class BaseController extends lexpress.BaseController {
         flash: R.equals(flash, {}) ? undefined : flash,
         me: this.req.user
       }))
-      // .catch(this.answerError)
+      .catch(this.answerError)
   }
 
   protected async getCategories(): Promise<CategoryTreeBranch[]> {
@@ -56,7 +56,7 @@ export default class BaseController extends lexpress.BaseController {
         name: category.name,
         slug: category.slug,
         position: category.position,
-        depth: category.parent === null ? 0 : undefined,
+        depth: category.parent === undefined ? 0 : undefined,
         children: [],
       }))
     }
