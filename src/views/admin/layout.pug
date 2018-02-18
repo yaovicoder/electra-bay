@@ -3,5 +3,6 @@ extends ../layout.pug
 append styles
   link(rel='stylesheet' href='/css/admin.css')
 
-block scripts
-  script(src='/js/admin.js')
+append scripts
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js')
+  script(src='/js/admin/index.js')
