@@ -1,9 +1,12 @@
+import * as dotenv from 'dotenv'
 import * as lexpress from 'lexpress'
 import * as R from 'ramda'
 
 import MongoDbClient from '../libs/MongoDbClient'
 import RedisClient from '../libs/RedisClient'
 import { Category, CategoryTreeBranch } from '../models/Category'
+
+dotenv.config()
 
 const ONE_DAY_IN_SECONDS: number = 86400
 // tslint:disable-next-line:no-require-imports no-var-requires
@@ -20,6 +23,7 @@ export default class BaseController extends lexpress.BaseController {
     this.getCategoriesTree()
       .then((categories: CategoryTreeBranch[]) => this.res.render(view, {
         ...options,
+        baseUrl: process.env.BASE_URL,
         categories,
         flash: R.equals(flash, {}) ? undefined : flash,
         me: this.req.user,
