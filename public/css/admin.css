@@ -12,7 +12,6 @@
   color: black;
   font-size: .75rem;
   line-height: 2;
-  text-transform: uppercase;
 }
 .categoriesList--ready .categoriesList__child:hover {
   background-color: #ddd;
@@ -49,5 +48,4 @@
   color: black;
   font-size: .75rem;
   line-height: 2;
-  text-transform: uppercase;
 }
