@@ -38,11 +38,6 @@ export default model<Category>('Category', new Schema({
     min: 0,
     required: true,
   },
-  depth: {
-    type: Number,
-    min: 0,
-    required: true,
-  },
   createdAt: {
     type: Date,
     required: true,
