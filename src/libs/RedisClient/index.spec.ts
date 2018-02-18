@@ -2,7 +2,6 @@
 
 import * as assert from 'assert'
 
-import RedisClient from '.'
 import assertCatch from '../../helpers/assertCatch'
 
 function waitFor(inMs: number) {
@@ -10,7 +9,16 @@ function waitFor(inMs: number) {
 }
 
 describe('RedisClient', function() {
-  const redisClient = new RedisClient()
+  let redisClient
+
+  before(function() {
+    const RedisClient = require('.')
+    redisClient = new RedisClient()
+  })
+
+  after(function() {
+    redisClient.client.quit()
+  })
 
   describe('#cache()', function() {
     it('SHOULD be undefined', async function() {
@@ -68,9 +76,5 @@ describe('RedisClient', function() {
     it('SHOULD fail with a function', async function() {
       assert.strictEqual(await assertCatch(() => redisClient.cache('function', waitFor, 1)), true)
     })
-  })
-
-  after(function() {
-    redisClient.client.quit()
   })
 })
