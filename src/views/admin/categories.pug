@@ -1,0 +1,11 @@
+extends layout.pug
+
+append metas
+  meta(name='categories-last' content=JSON.stringify(categoriesLast))
+
+block content
+  h2 Manage Categories
+  div(class='js-categoriesList categoriesList--ready')
+
+append scripts
+  script(src='/js/admin/categories.js')
