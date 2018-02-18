@@ -14,7 +14,8 @@ mixin getCategoryList(categories, categoryCurrentChain)
 
 nav(class='col-md-3 d-none d-md-block bg-light sidebar')
   div(class='sidebar-sticky mt-2 sidebar__categoryList')
-    +getCategoryList(categories, categoryCurrentChain)
+    if (categories !== undefined)
+      +getCategoryList(categories, categoryCurrentChain)
 
   if (me !== undefined)
     hr
@@ -38,7 +39,7 @@ nav(class='col-md-3 d-none d-md-block bg-light sidebar')
       p(class='h4') Administration
       ul(class='list-unstyled')
         li
-          a(href='/a/categories') Categories
+          a(href='/a/category') Categories
 
   hr
   p(class='text-center')
