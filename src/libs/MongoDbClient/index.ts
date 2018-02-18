@@ -135,6 +135,40 @@ export default class MongoDbClient {
     })
   }
 
+  public async updateOneById<T extends mongoose.Document>(
+    modelName: keyof Models,
+    id: any,
+    query: mongoose.Query<T>,
+    options: mongoose.ModelUpdateOptions = {}
+  ): Promise<mongoose.Document> {
+    if (!clientIsConnected) {
+      const [err] = await to(this.connect())
+      if (err !== null) return Promise.reject(err)
+    }
+
+    // tslint:disable-next-line:variable-name
+    const Model: mongoose.Model<mongoose.Document> = MODELS[modelName]
+
+    const [err, model] = tryCatch<mongoose.Document>(() => new Model())
+    if (err !== undefined) return Promise.reject(err)
+
+    return new Promise<mongoose.Document>((
+      resolve: (result: mongoose.Document) => void,
+      reject: (err: Error) => void
+    ): void => {
+      (model.update as any)({ _id: id }, query, options, (err: Error, res: T) => {
+        if (err !== null) {
+          log.err(err.message)
+          reject(new Error(`libs/MongoDbClient#updateOneById(): Model.update() failed.`))
+
+          return
+        }
+
+        resolve(res)
+      })
+    })
+  }
+
   public async save<T extends mongoose.Document>(
     modelName: keyof Models,
     data: T,
