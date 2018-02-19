@@ -42,7 +42,7 @@ export default class BaseController extends lexpress.BaseController {
     return this.cacheCategories()
   }
 
-  protected async cacheCategories(): Promise<Category[]> {
+  private async cacheCategories(): Promise<Category[]> {
     const categories: Category[] = await this.db.find<Category>('Category')
     await this.redis.cache('categories', categories, ONE_DAY_IN_SECONDS)
 
