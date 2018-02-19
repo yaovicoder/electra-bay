@@ -122,7 +122,7 @@ const CATEGORIES_TREE_TEST: any = [
   },
 ]
 
-describe.only('helpers/generateCategoriesTree()', function() {
+describe('helpers/generateCategoriesTree()', function() {
   it(`SHOULD return the expected result`, function() {
     assert.deepEqual(generateCategoriesTree(CATEGORIES_TEST), CATEGORIES_TREE_TEST)
   })
