@@ -4,6 +4,9 @@ class CategoriesList {
     this.categories = Helpers.getMeta('categories-last')
     this.isMoving = false
 
+    this.moveHandler = this.move.bind(this)
+    this.endMoveHandler = this.endMove.bind(this)
+
     this.render()
   }
 
@@ -19,8 +22,6 @@ class CategoriesList {
   }
 
   bindEvents() {
-    this.moveHandler = this.move.bind(this)
-
     this.$children
       .forEach($child => {
         $child
@@ -30,7 +31,7 @@ class CategoriesList {
           .querySelector('.js-categoryMovable')
           .addEventListener('mouseup', this.endMove.bind(this), false)
         $child.querySelector('.js-categoryDeleteButton')
-          .addEventListener('mouseup', () => this.deleteCategory($child.dataset.id), false)
+          .addEventListener('click', () => this.deleteCategory($child.dataset.id), false)
       })
 
     this.$input.addEventListener('keypress', this.addCategory.bind(this))
@@ -40,51 +41,73 @@ class CategoriesList {
     if (this.isMoving) return
 
     this.isMoving = true
-    this.$currentChild = event.target.parentNode
+    this.$selectedChild = event.target.parentNode
     this.parentRelatedOriginalPosition = {
-      x: this.$currentChild.offsetLeft,
-      y: this.$currentChild.offsetTop,
+      x: this.$selectedChild.offsetLeft,
+      y: this.$selectedChild.offsetTop,
     }
     this.firstCursorPosition = {
       x: event.clientX,
       y: event.clientY,
     }
 
-    const $emptyChild = document.createElement('div')
-    $emptyChild.classList.add('categoriesList__child--empty')
-    $emptyChild.style.marginLeft = `${Number(this.$currentChild.dataset.depth) * 1}rem`
-    this.$emptyChild = this.$el.insertBefore($emptyChild, this.$currentChild)
+    this.$target = document.createElement('div')
+    this.$target.classList.add('categoriesList__child--empty')
+    this.$target.style.marginLeft = `${Number(this.$selectedChild.dataset.depth) * 1}rem`
+    this.$el.insertBefore(this.$target, this.$selectedChild)
 
-    this.$currentChild.style.left = this.parentRelatedOriginalPosition.x
-    this.$currentChild.style.top = this.parentRelatedOriginalPosition.y
-    this.$currentChild.style.width = `${this.$currentChild.clientWidth}px`
-    this.$currentChild.classList.add('categoriesList__child--free')
+    this.$selectedChild.style.left = this.parentRelatedOriginalPosition.x
+    this.$selectedChild.style.top = this.parentRelatedOriginalPosition.y
+    this.$selectedChild.style.width = `${this.$selectedChild.clientWidth}px`
+    this.$selectedChild.classList.add('categoriesList__child--free')
 
     this.$el.classList.remove('categoriesList--ready')
 
     document.addEventListener('mousemove', this.moveHandler)
+    document.addEventListener('mouseup', this.endMoveHandler, { once: true })
 
     console.log('startMove')
   }
 
   move(event) {
     const currentChildNewTop = this.parentRelatedOriginalPosition.y + event.clientY - this.firstCursorPosition.y
-    const currentChildDistanceFromFirstChild = currentChildNewTop - this.parentRelatedRefencePosition.y
+    let currentChildDistanceFromFirstChild = currentChildNewTop - this.parentRelatedRefencePosition.y
 
     if (currentChildDistanceFromFirstChild <= 0) {
-      this.$currentChild.style.top = this.parentRelatedRefencePosition.y
-      return
+      this.$selectedChild.style.top = this.parentRelatedRefencePosition.y
+      currentChildDistanceFromFirstChild = 0
+    } else if (currentChildDistanceFromFirstChild >= (this.$children.length - 1) * this.childHeight) {
+      this.$selectedChild.style.top = this.parentRelatedRefencePosition.y + (this.$children.length - 1) * this.childHeight
+      currentChildDistanceFromFirstChild = (this.$children.length - 1) * this.childHeight
+    } else {
+      this.$selectedChild.style.top = currentChildNewTop
     }
-    this.$currentChild.style.top = currentChildNewTop
 
-    const currentBelowChildIndex = Math.floor((currentChildNewTop - this.parentRelatedRefencePosition.y) / this.childHeight)
-    if (currentBelowChildIndex === this.lastBelowChildIndex) return
-    this.lastBelowChildIndex = currentBelowChildIndex
+    const targetIndex = Math.floor(currentChildDistanceFromFirstChild / this.childHeight)
+    const targetDepth = targetIndex === 0 ? 0 : Number(event.clientX - this.firstCursorPosition.x > 16)
 
-    const $currentBelowChild = this.$children[currentBelowChildIndex]
+    if (targetIndex !== this.targetIndex || targetDepth !== this.targetDepth) {
+      this.targetDepth = targetDepth
+      this.targetIndex = targetIndex
+      this.moveTarget()
+    }
+  }
 
-    console.log('move')
-    console.log(this.$children[currentBelowChildIndex].dataset.id)
+  moveTarget() {
+    const $targetChild = this.$children[this.targetIndex]
+    this.$target.remove()
+
+    let targetRealDepth = 0
+
+    if (this.targetIndex !== 0) {
+      const $targetPreviousChild = this.$children[this.targetIndex - 1]
+      targetRealDepth = (Number($targetPreviousChild.dataset.depth) + this.targetDepth) * 1
+    }
+
+    // this.$selectedChild.style.marginLeft = `${targetRealDepth * 1}rem`
+    this.$target.style.marginLeft = `${targetRealDepth * 1}rem`
+
+    this.$el.insertBefore(this.$target, $targetChild)
   }
 
   endMove(event) {
@@ -92,13 +115,39 @@ class CategoriesList {
 
     document.removeEventListener('mousemove', this.moveHandler)
 
+    this.processTarget()
+
+    this.$target.remove()
+    this.$selectedChild.classList.remove('categoriesList__child--free')
+    this.$selectedChild.style.width = 'auto'
+
     this.isMoving = false
 
-    this.$emptyChild.remove()
-    this.$currentChild.classList.remove('categoriesList__child--free')
-    this.$currentChild.style.width = 'auto'
-
     console.log('endMove')
+  }
+
+  processTarget() {
+    const data = {
+      parent: null,
+      position: 0,
+    }
+
+    if (this.targetIndex !== 0) {
+      const $targetPreviousChild = this.$children[this.targetIndex - 1]
+      if (this.targetDepth === 0) {
+        if ($targetPreviousChild.dataset.parent === undefined) {
+          data.parent = null
+        } else {
+          data.parent = $targetPreviousChild.dataset.parent
+        }
+        data.position = Number($targetPreviousChild.dataset.position) + 1
+      } else {
+        data.parent = $targetPreviousChild.dataset.id
+        data.position = 0
+      }
+    }
+
+    this.updateCategory(this.$selectedChild.dataset.id, data)
   }
 
   async addCategory(event) {
@@ -106,6 +155,19 @@ class CategoriesList {
 
     try {
       const { data } = await window.axios.post('/api/category', { name: event.target.value })
+      this.categories = data
+    }
+    catch (err) {
+      console.error(err.message)
+    }
+
+    this.render()
+  }
+
+  async updateCategory(id, categoryData) {
+    console.log(categoryData)
+    try {
+      const { data } = await window.axios.put(`/api/category/${id}`, categoryData)
       this.categories = data
     }
     catch (err) {
@@ -127,7 +189,7 @@ class CategoriesList {
     this.render()
   }
 
-  getCategoriesHtml(categories) {
+  getCategoriesHtml(categories, index = 0) {
     let html = ''
 
     categories.forEach(category => {
@@ -135,9 +197,11 @@ class CategoriesList {
         <div
           class="js-categoryBox categoriesList__child"
           style="margin-left: ${category.depth * 1}rem;"
-          data-id=${category.id}
-          data-parent=${category.parent}
-          data-depth=${category.depth}
+          data-id="${category.id}"
+          ${category.parent !== undefined ? 'data-parent="' + category.parent + '"' : ''}
+          data-name="${category.name}"
+          data-position="${category.position}"
+          data-depth="${category.depth}"
         >
           <span class="js-categoryMovable categoriesListChild__text">${category.name}</span>
           <svg class="js-categoryDeleteButton categoriesListChild__deleteButton">
@@ -146,7 +210,9 @@ class CategoriesList {
         </div>
       `
 
-      if (category.children.length !== 0) html += this.getCategoriesHtml(category.children)
+      index++
+
+      if (category.children.length !== 0) html += this.getCategoriesHtml(category.children, index)
     })
 
     return html
