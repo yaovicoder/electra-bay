@@ -1,4 +1,9 @@
 extends ../layout.pug
 
 block content
-  h1 #{categoryCurrent.name}
+  div(class='d-flex justify-content-between align-items-center content__title')
+    h1 #{categoryCurrent.name}
+    if (me !== undefined)
+      a(href=`/c/${categoryCurrent.slug}/insert`)
+        svg(class='icon')
+          use(xlink:href='/sprites/open-iconic.svg#plus')
