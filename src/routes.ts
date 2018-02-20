@@ -136,6 +136,13 @@ const routes: Route[] = [
   },
   {
     path: '/api/category/:categoryId',
+    method: 'put',
+    controller: ApiCategoryController,
+    middleware: isAdmin,
+    settings: { isCached: false }
+  },
+  {
+    path: '/api/category/:categoryId',
     method: 'delete',
     controller: ApiCategoryController,
     middleware: isAdmin,
