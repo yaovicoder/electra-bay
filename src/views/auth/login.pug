@@ -34,14 +34,14 @@ block content
       if errors && errors.password
         div(class='invalid-feedback') #{errors.password}
 
-    //- div(class='form-check')
-    //-   input(
-    //-     class='form-check-input'
-    //-     id='rememberMe'
-    //-     name='rememberMe'
-    //-     type='checkbox'
-    //-   )
-    //-   label(class='form-check-label' for='rememberMe') Remember Me
+    div(class='form-check')
+      input(
+        class='form-check-input'
+        id='rememberMe'
+        name='rememberMe'
+        type='checkbox'
+      )
+      label(class='form-check-label' for='rememberMe') Remember Me
 
     div(class='d-flex justify-content-between mt-4')
       button(type='submit' class='btn btn-primary' role='button' aria-label='Submit the login form') Log In
