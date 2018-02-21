@@ -1,5 +1,4 @@
 import { Route } from 'lexpress'
-import * as passport from 'passport'
 
 import AdminCategoryController from './controllers/admin/CategoryController'
 
@@ -78,11 +77,7 @@ const routes: Route[] = [
   {
     path: '/login',
     method: 'post',
-    call: passport.authenticate('local', {
-      successRedirect: '/',
-      failureRedirect: '/login',
-      failureFlash: true,
-    }),
+    controller: AuthLogInController,
     settings: { isCached: false },
   },
   {
