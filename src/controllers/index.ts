@@ -1,6 +1,5 @@
 import * as dotenv from 'dotenv'
 import * as lexpress from 'lexpress'
-import * as R from 'ramda'
 
 import generateCategoriesTree from '../helpers/generateCategoriesTree'
 import MongoDbClient from '../libs/MongoDbClient'
@@ -20,14 +19,12 @@ export default class BaseController extends lexpress.BaseController {
   protected redis: RedisClient = new RedisClient()
 
   protected render(view: string, options: any = {}): void {
-    const flash: {} = this.req.flash()
-
     this.getCategoriesTree()
       .then((categories: CategoryTreeBranch[]) => this.res.render(view, {
         ...options,
         baseUrl: process.env.BASE_URL,
         categories,
-        flash: R.equals(flash, {}) ? undefined : flash,
+        flash: this.req.flash(),
         me: this.req.user,
         version: VERSION
       }))
