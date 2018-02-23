@@ -34,11 +34,14 @@
 }
 
 /* Category */
-.category__photo {
+.categoryItem {
+  width: 18rem;
+}
+.categoryItem__photo {
   background-position: center center;
   background-size: cover;
 }
-.category__photoPlaceholder {
+.categoryItem__photoPlaceholder {
   height: 8rem;
   width: 100%;
 }
