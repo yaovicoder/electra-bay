@@ -47,7 +47,7 @@ const routes: Route[] = [
     controller: WebCategoryController,
   },
   {
-    path: '/i/:itemSlug',
+    path: '/i/:itemId/:itemSlug',
     method: 'get',
     controller: WebItemController,
   },
