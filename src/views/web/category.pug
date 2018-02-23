@@ -28,5 +28,6 @@ block content
           a(href=`/i/${item.slug}`)
             h5(class='card-title') #{item.name}
           +description(item.description, 120)
+          p(class='categoryItem__price')= `ECA ${Math.round(item.price).toLocaleString()}`
           .text-right
             a(href=`/i/${item.slug}` class='btn btn-primary') More
