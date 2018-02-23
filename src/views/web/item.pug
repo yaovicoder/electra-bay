@@ -2,3 +2,18 @@ extends ../layout.pug
 
 block content
   h1 #{item.name}
+
+  div(class='d-flex mt-4')
+    div(
+      alt='Card image cap'
+      class='mr-4 item__photo'
+      style=`background-image: url(${awsS3BaseUrl}/${item.slug}.jpg)`
+    )
+      img(
+        class='item__photoPlaceholder'
+        src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+      )
+    p #{item.description}
+
+  div(class='text-right mt-4')
+    a(href=`#` class='btn btn-primary') Buy
