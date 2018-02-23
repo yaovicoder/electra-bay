@@ -22,6 +22,7 @@ export default class BaseController extends lexpress.BaseController {
     this.getCategoriesTree()
       .then((categories: CategoryTreeBranch[]) => this.res.render(view, {
         ...options,
+        awsS3BaseUrl: `https://s3.amazonaws.com/${process.env.AWS_S3_BUCKET_NAME}`,
         baseUrl: process.env.BASE_URL,
         categories,
         flash: this.req.flash(),
