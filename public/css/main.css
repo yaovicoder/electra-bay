@@ -45,6 +45,10 @@
   height: 8rem;
   width: 100%;
 }
+.categoryItem__price {
+  color: black;
+  font-weight: 600;
+}
 
 /* Category */
 .item__photo {
