@@ -1,11 +1,12 @@
-import * as aws from 'aws-sdk'
-import * as dotenv from 'dotenv'
 import * as R from 'ramda'
+import * as sharp from 'sharp'
 import * as uuid from 'uuid'
 
 import BaseController from '..'
 import slugify from '../../helpers/slugify'
+import AwsClient from '../../libs/AwsClient'
 
+import { AwsUploadFile } from '../../libs/AwsClient/types'
 import { Category } from '../../models/Category'
 import ItemSchema, { Item } from '../../models/Item'
 
@@ -16,14 +17,11 @@ type ItemAddFormFields = {
   photo?: string,
 }
 
-dotenv.config()
-
 const HTTP_STATUS_CODE_NOT_FOUND: number = 404
 const ITEM_DESCRIPTION_LENGTH_MIN: number = 50
-
-const awsS3: aws.S3 = new aws.S3({
-  apiVersion: '2006-03-01',
-})
+const ITEM_PHOTO_SMALL_SIZE_MAX: number = 320
+const ITEM_PHOTO_MEDIUM_SIZE_MAX: number = 640
+const ITEM_PHOTO_LARGE_SIZE_MAX: number = 1080
 
 export default class ItemAddController extends BaseController {
   public get(): void {
@@ -112,22 +110,51 @@ export default class ItemAddController extends BaseController {
 
         this.db.save('Item', item)
           .then((item: Item) => {
-            awsS3.upload(
-              {
-                Key: `${item.slug}.jpg`,
-                Body: this.req.file.buffer,
-                Bucket: process.env.AWS_S3_BUCKET_NAME
-              },
-              (err: Error) => {
-                if (err !== null) {
-                  this.answerError(err)
-
-                  return
+            Promise.all<Buffer, Buffer, Buffer>([
+              sharp(this.req.file.buffer)
+                .resize(ITEM_PHOTO_SMALL_SIZE_MAX, ITEM_PHOTO_SMALL_SIZE_MAX)
+                .max()
+                .toBuffer(),
+              sharp(this.req.file.buffer)
+                .resize(ITEM_PHOTO_MEDIUM_SIZE_MAX, ITEM_PHOTO_MEDIUM_SIZE_MAX)
+                .max()
+                .toBuffer(),
+              sharp(this.req.file.buffer)
+                .resize(ITEM_PHOTO_LARGE_SIZE_MAX, ITEM_PHOTO_LARGE_SIZE_MAX)
+                .max()
+                .toBuffer(),
+            ])
+              .then(([photoSmallBuffer, photoMediumBuffer, photoLargeBuffer]: [Buffer, Buffer, Buffer]) => {
+                const fileOriginal: AwsUploadFile = {
+                  name: `${item.slug}_o.jpg`,
+                  source: this.req.file.buffer
                 }
 
-                this.res.redirect(`/u/${this.req.user.slug}/listings`)
-              }
-            )
+                const fileSmall: AwsUploadFile = {
+                  name: `${item.slug}_s.jpg`,
+                  source: photoSmallBuffer
+                }
+
+                const fileMedium: AwsUploadFile = {
+                  name: `${item.slug}_m.jpg`,
+                  source: photoMediumBuffer
+                }
+
+                const fileLarge: AwsUploadFile = {
+                  name: `${item.slug}_l.jpg`,
+                  source: photoLargeBuffer
+                }
+
+                AwsClient.uploadMany([
+                  fileOriginal,
+                  fileSmall,
+                  fileMedium,
+                  fileLarge,
+                ])
+                  .then(() => this.res.redirect(`/u/${this.req.user.slug}/listings`))
+                  .catch(this.answerError)
+              })
+              .catch(this.answerError)
           })
           .catch(this.answerError)
       })
