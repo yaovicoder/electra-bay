@@ -26,3 +26,19 @@
   margin-right: .5rem;
   width: .5rem;
 }
+
+/* Content */
+.content__title svg {
+  height: 2rem;
+  width: 2rem;
+}
+
+/* Category */
+.category__photo {
+  background-position: center center;
+  background-size: cover;
+}
+.category__photoPlaceholder {
+  height: 8rem;
+  width: 100%;
+}
