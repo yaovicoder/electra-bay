@@ -1,5 +1,8 @@
 extends ../layout.pug
 
+mixin description(content, length)
+  p(class='card-text') #{content.length > length ? `${content.substr(0, 50)}…` : content}
+
 block content
   div(class='d-flex justify-content-between align-items-center content__title')
     h1 #{categoryCurrent.name}
@@ -7,3 +10,23 @@ block content
       a(href=`/c/${categoryCurrent.slug}/insert`)
         svg(class='icon')
           use(xlink:href='/sprites/open-iconic.svg#plus')
+
+  .mt-3
+    each item in items
+      div(class='card' style='width: 18rem;')
+        div(
+          alt='Card image cap'
+          class='category__photo'
+          style=`background-image: url(https://via.placeholder.com/350x1150)`
+        )
+          a(href=`/i/${item.id}/${item.slug}`)
+            img(
+              class='category__photoPlaceholder'
+              src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+            )
+        .card-body
+          a(href=`/i/${item.id}/${item.slug}`)
+            h5(class='card-title') #{item.name}
+          +description(item.description, 120)
+          .text-right
+            a(href=`/i/${item.id}/${item.slug}` class='btn btn-primary') More
