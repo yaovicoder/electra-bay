@@ -41,6 +41,7 @@
     "@types/uuid": "^3.4.3",
     "await-to-js": "^2.0.1",
     "awesome-typescript-loader": "^3.4.1",
+    "aws-sdk": "^2.201.0",
     "clean-webpack-plugin": "^0.1.18",
     "connect-flash": "^0.1.1",
     "dotenv": "^5.0.0",
