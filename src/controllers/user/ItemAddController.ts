@@ -1,4 +1,7 @@
+import * as aws from 'aws-sdk'
+import * as dotenv from 'dotenv'
 import * as R from 'ramda'
+import * as uuid from 'uuid'
 
 import BaseController from '..'
 import slugify from '../../helpers/slugify'
@@ -13,8 +16,14 @@ type ItemAddFormFields = {
   photo?: string,
 }
 
+dotenv.config()
+
 const HTTP_STATUS_CODE_NOT_FOUND: number = 404
 const ITEM_DESCRIPTION_LENGTH_MIN: number = 50
+
+const awsS3: aws.S3 = new aws.S3({
+  apiVersion: '2006-03-01',
+})
 
 export default class ItemAddController extends BaseController {
   public get(): void {
@@ -96,13 +105,30 @@ export default class ItemAddController extends BaseController {
           name: this.req.body.name,
           description: this.req.body.description,
           price: this.req.body.price,
-          slug: slugify(this.req.body.name),
+          slug: `${slugify(this.req.body.name)}-${uuid.v4()}`,
           createdAt: new Date(),
           updatedAt: new Date(),
         })
 
         this.db.save('Item', item)
-          .then((item: Item) => this.res.redirect(`/u/${this.req.user.slug}/listings`))
+          .then((item: Item) => {
+            awsS3.upload(
+              {
+                Key: `${item.slug}.jpg`,
+                Body: this.req.file.buffer,
+                Bucket: process.env.AWS_S3_BUCKET_NAME
+              },
+              (err: Error) => {
+                if (err !== null) {
+                  this.answerError(err)
+
+                  return
+                }
+
+                this.res.redirect(`/u/${this.req.user.slug}/listings`)
+              }
+            )
+          })
           .catch(this.answerError)
       })
       .catch(this.answerError)
