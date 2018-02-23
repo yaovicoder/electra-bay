@@ -19,14 +19,14 @@ block content
           class='categoryItem__photo'
           style=`background-image: url(${awsS3BaseUrl}/${item.slug}.jpg)`
         )
-          a(href=`/i/${item.id}/${item.slug}`)
+          a(href=`/i/${item.slug}`)
             img(
               class='categoryItem__photoPlaceholder'
               src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
             )
         .card-body
-          a(href=`/i/${item.id}/${item.slug}`)
+          a(href=`/i/${item.slug}`)
             h5(class='card-title') #{item.name}
           +description(item.description, 120)
           .text-right
-            a(href=`/i/${item.id}/${item.slug}` class='btn btn-primary') More
+            a(href=`/i/${item.slug}` class='btn btn-primary') More
