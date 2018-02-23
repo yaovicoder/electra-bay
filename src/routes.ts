@@ -1,4 +1,5 @@
-import { Route } from 'lexpress'
+import { NextFunction, Request, Response, Route } from 'lexpress'
+import * as multer from 'multer'
 
 import AdminCategoryController from './controllers/admin/CategoryController'
 
@@ -18,6 +19,16 @@ import WebUserController from './controllers/web/UserController'
 
 import isAdmin from './middlewares/isAdmin'
 import isAuthenticated from './middlewares/isAuthenticated'
+
+const UPLOAD_FILE_SIZE_MAX: number = 8388608
+
+const upload: Route['middleware'] = multer({
+  limits: {
+    fileSize: UPLOAD_FILE_SIZE_MAX,
+  },
+  storage: multer.memoryStorage(),
+})
+  .single('photo')
 
 // tslint:disable:object-literal-sort-keys
 const routes: Route[] = [
@@ -96,6 +107,21 @@ const routes: Route[] = [
     method: 'get',
     controller: UserItemAddController,
     middleware: isAuthenticated,
+    settings: { isCached: false },
+  },
+  {
+    path: '/c/:categorySlug/insert',
+    method: 'post',
+    controller: UserItemAddController,
+    middleware: [
+      isAuthenticated,
+      (req: Request, res: Response, next: NextFunction): void => {
+        upload(req, res, (err: Error) => {
+          if (err) req.flash('photoError', err.message)
+          next()
+        })
+      },
+    ],
     settings: { isCached: false },
   },
 
