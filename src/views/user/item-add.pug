@@ -1,36 +1,60 @@
 extends ../layout.pug
 
 block content
-  h1 List a new item
-  form(method='post' action='/login' novalidate autocomplete='off')
+  h1 #{categoryCurrent.name}
+  h2 List a new item
+  form(enctype='multipart/form-data' method='post' action=`/c/${categoryCurrent.slug}/insert` novalidate autocomplete='off')
     div(class='form-group')
       label(for='name') Name
       input(
         autocapitalize='off'
         autocorrect='off'
-        class=`form-control${errors && errors.name ? ' is-invalid' : ''}`
+        class=`form-control${flash.nameError ? ' is-invalid' : ''}`
         id='name'
         name='name'
-        placeholder='Username'
+        placeholder='Name'
         spellcheck='false'
         type='text'
-        value=values && values.name ? values.name : ''
+        value=flash.name ? `${flash.name}` : ''
       )
-      if errors && errors.name
-        div(class='invalid-feedback') #{errors.name}
+      div(class='invalid-feedback') #{flash.nameError}
+
+    div(class='form-group')
+      label(for='description') Description
+      textarea(
+        class=`form-control${flash.descriptionError ? ' is-invalid' : ''}`
+        id='description'
+        name='description'
+        placeholder='Description'
+        spellcheck='false'
+      ) #{flash.description}
+      div(class='invalid-feedback') #{flash.descriptionError}
 
     div(class='form-group')
       label(for='price') Price
+      div(class='input-group')
+        div(class='input-group-prepend')
+          div(class='input-group-text') ECA
+        input(
+          class=`form-control${flash.priceError ? ' is-invalid' : ''}`
+          id='price'
+          name='price'
+          placeholder='Price'
+          type='number'
+          value=flash.price ? `${flash.price}` : ''
+        )
+        div(class='invalid-feedback') #{flash.priceError}
+
+    div(class='form-group')
+      label(for='photo') Photo
       input(
-        class=`form-control${errors && errors.price ? ' is-invalid' : ''}`
-        id='price'
-        name='price'
-        placeholder='Price'
-        spellcheck='false'
-        type='number'
-        value=values && values.price ? values.price : ''
+        class=`form-control${flash.photoError ? ' is-invalid' : ''}`
+        id='photo'
+        name='photo'
+        placeholder='Photo'
+        type='file'
       )
-      if errors && errors.price
-        div(class='invalid-feedback') #{errors.price}
+      if flash.photoError
+        div(class='invalid-feedback') #{flash.photoError[0]}
 
     button(type='submit' class='btn btn-primary mt-3') Publish
