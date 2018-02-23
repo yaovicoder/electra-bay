@@ -11,17 +11,17 @@ block content
         svg(class='icon')
           use(xlink:href='/sprites/open-iconic.svg#plus')
 
-  .mt-3
+  div(class='d-flex mt-3')
     each item in items
-      div(class='card' style='width: 18rem;')
+      div(class='card mr-4 categoryItem')
         div(
           alt='Card image cap'
-          class='category__photo'
+          class='categoryItem__photo'
           style=`background-image: url(${awsS3BaseUrl}/${item.slug}.jpg)`
         )
           a(href=`/i/${item.id}/${item.slug}`)
             img(
-              class='category__photoPlaceholder'
+              class='categoryItem__photoPlaceholder'
               src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
             )
         .card-body
