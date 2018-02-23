@@ -45,3 +45,14 @@
   height: 8rem;
   width: 100%;
 }
+
+/* Category */
+.item__photo {
+  background-position: center center;
+  background-size: cover;
+  /* width: 100%; */
+}
+.item__photoPlaceholder {
+  height: 8rem;
+  width: 16rem;
+}
