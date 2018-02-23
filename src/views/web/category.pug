@@ -17,7 +17,7 @@ block content
         div(
           alt='Card image cap'
           class='category__photo'
-          style=`background-image: url(https://via.placeholder.com/350x1150)`
+          style=`background-image: url(${awsS3BaseUrl}/${item.slug}.jpg)`
         )
           a(href=`/i/${item.id}/${item.slug}`)
             img(
