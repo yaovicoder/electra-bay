@@ -1,5 +1,7 @@
 import { Document, model, Schema, Types } from 'mongoose'
 
+import { slug } from './schemas'
+
 export interface Item extends Document {
   category: Types.ObjectId
   user: Types.ObjectId
@@ -37,11 +39,7 @@ export default model<Item>('Item', new Schema({
     type: Number,
     required: true,
   },
-  slug: {
-    type: String,
-    required: true,
-    unique: true,
-  },
+  slug,
   createdAt: {
     type: Date,
     required: true,
