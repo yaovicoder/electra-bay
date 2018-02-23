@@ -24,10 +24,13 @@ export default model<Item>('Item', new Schema({
   },
   name: {
     type: String,
+    trim: true,
     required: true,
   },
   description: {
     type: String,
+    trim: true,
+    match: /^.{50}/,
     required: true,
   },
   price: {
