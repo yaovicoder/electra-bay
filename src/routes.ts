@@ -11,6 +11,7 @@ import AuthLogOutController from './controllers/auth/LogOutController'
 import AuthSignUpController from './controllers/auth/SignUpController'
 
 import UserItemAddController from './controllers/user/ItemAddController'
+import UserItemListController from './controllers/user/ItemListController'
 
 import WebCategoryController from './controllers/web/CategoryController'
 import WebHomeController from './controllers/web/HomeController'
@@ -122,6 +123,13 @@ const routes: Route[] = [
         })
       },
     ],
+    settings: { isCached: false },
+  },
+  {
+    path: '/u/:userSlug/listings',
+    method: 'get',
+    controller: UserItemListController,
+    middleware: isAuthenticated,
     settings: { isCached: false },
   },
 
