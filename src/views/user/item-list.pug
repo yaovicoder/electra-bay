@@ -1,0 +1,23 @@
+extends ../layout.pug
+
+block content
+  table(class='table table-sm itemList')
+    thead(class='thead-dark')
+      tr
+        th(scope='col') Name
+        th(scope='col') Price
+        th(scope='col') Listed
+        th(scope='col')
+    tbody
+      each item in items
+        tr
+          td #{item.name}
+          td ECA #{item.price.toLocaleString()}
+          td #{item.since}
+          td(class='itemList__actions')
+            a(href=`/i/${item.slug}/edit` aria-label='Edit')
+              svg
+                use(xlink:href='/sprites/open-iconic.svg#pencil')
+            a(href=`/i/${item.slug}/delete` aria-label='Remove')
+              svg
+                use(xlink:href='/sprites/open-iconic.svg#trash')
