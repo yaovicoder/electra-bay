@@ -9,7 +9,7 @@ export interface Item extends Document {
   description: string
   price: number
   slug: string
-  createdAd: Date
+  createdAt: Date
   updatedAt: Date
 }
 
