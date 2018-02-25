@@ -21,3 +21,5 @@ block content
             a(href=`/i/${item.slug}/delete` aria-label='Remove')
               svg
                 use(xlink:href='/sprites/open-iconic.svg#trash')
+      else
+        tr(colspan='4') You don't have any listed item, yet.
