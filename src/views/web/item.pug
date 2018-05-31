@@ -9,11 +9,14 @@ block content
       class='mr-4 item__photo'
       style=`background-image: url(${awsS3BaseUrl}/${item.slug}_m.jpg)`
     )
-      img(
-        class='item__photoPlaceholder'
-        src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
-      )
+      a(href=`${awsS3BaseUrl}/${item.slug}_o.jpg` target='_blank')
+        img(
+          class='item__photoPlaceholder'
+          src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+        )
     p #{item.description}
 
   div(class='text-right mt-4')
-    a(href=`#` class='btn btn-primary') Buy
+    p(class='h3') ECA #{Math.round(item.price).toLocaleString()}
+    p(class='mt-4')
+      a(href=`#` class='btn btn-primary') Buy
