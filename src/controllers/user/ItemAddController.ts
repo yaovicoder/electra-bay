@@ -89,8 +89,8 @@ export default class ItemAddController extends BaseController {
           this.req.flash('description', description)
           this.req.flash('price', price)
 
-          R.toPairs<ItemAddFormFields, string>(errors)
-            .map(([error, message]: [ItemAddFormFields, string]) => this.req.flash(`${error}Error`, message))
+          R.toPairs<any>(errors)
+            .map(([error, message]: [string, string]) => this.req.flash(`${error}Error`, message))
 
           this.res.redirect(this.req.path)
 
