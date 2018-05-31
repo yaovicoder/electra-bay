@@ -2,7 +2,7 @@
 
 > Buy and sell anything, in ECAs.
 
-**Website:** [https://electra-bay.com]([https://electra-bay.com)
+**Website:** [https://electra-bay.com](https://electra-bay.com)
 
 [![The MIT License](https://img.shields.io/badge/license-MIT-orange.svg?style=flat-square)](http://opensource.org/licenses/MIT)
 [![Travis](https://img.shields.io/travis/Electra-project/electra-bay.svg?style=flat-square)](https://travis-ci.org/Electra-project/electra-bay)
