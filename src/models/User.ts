@@ -11,7 +11,7 @@ export interface User extends PassportLocalDocument {
   isManager: boolean
   isVerified: boolean
   gravatar: string
-  createdAd: Date
+  createdAt: Date
   updatedAt: Date
 }
 
