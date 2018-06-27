@@ -12,6 +12,7 @@ import AuthSignUpController from './controllers/auth/SignUpController'
 
 import UserItemAddController from './controllers/user/ItemAddController'
 import UserItemListController from './controllers/user/ItemListController'
+import UserProfileController from "./controllers/user/ProfileController"
 
 import WebCategoryController from './controllers/web/CategoryController'
 import WebHomeController from './controllers/web/HomeController'
@@ -131,6 +132,20 @@ const routes: Route[] = [
     controller: UserItemListController,
     middleware: isAuthenticated,
     settings: { isCached: false },
+  },
+  {
+    path: "/u/:userSlug/profile",
+    method: "get",
+    controller: UserProfileController,
+    middleware: isAuthenticated,
+    settings: {isCached: false}
+  },
+  {
+    path: "/u/:userSlug/profile",
+    method: "post",
+    controller: UserProfileController,
+    middleware: isAuthenticated,
+    settings: {isCached: false}
   },
 
   /*

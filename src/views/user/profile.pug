@@ -1,0 +1,124 @@
+extends ../layout.pug
+
+block content
+
+    if success && success.changePw
+        div(class = "alert alert-success" role="alert").
+            Password Updated
+    if success && success.changeEmail
+        div(class = "alert alert-success" role="alert").
+            Email Updated.
+            An email has been sent to the new email address.
+            Please check your mailbox to activate your account !
+
+    img(
+        class = "gravatarPicture"
+        src = `https://s.gravatar.com/avatar/${values.gravatar}?s=160`
+    )
+
+    center
+        label Created At: #{values.createTime}
+    
+    form(class = "mt-3" method = "post" action=`/u/${values.slug}/profile` novalidate)
+
+        input(
+            hidden
+            name = "gravatar"
+            id = "gravatar"
+            value = values.gravatar
+        )
+
+        input(
+            hidden
+            name = "createTime"
+            id = "createTime"
+            value = values.createTime
+        )
+
+        input(
+            hidden
+            id = "username"
+            name = "username"
+            value = values.username
+        )
+
+        input(
+            hidden
+            id = "slug"
+            name = "slug"
+            value = values.slug
+        )
+
+        div(class = "form-group")
+            label Public Username:
+            input(
+                disabled
+                class = "form-control"
+                value = values.username
+                type = "text"
+            )
+        
+        div(class = "from-group")
+            label Email:
+            input(
+                aria-describedby=errors && errors.email ? '' : 'emailHelp'
+                autocapitalize='off'
+                autocomplete='email'
+                autocorrect='off'
+                class=`form-control${errors && errors.email ? ' is-invalid' : ''}`
+                id = 'email'
+                name = 'email'
+                placeholder = 'Email'
+                spellcheck = 'false'
+                type = 'email'
+                value = values.email
+            )
+            if errors && errors.email
+                div(class='invalid-feedback') #{errors.email}
+        
+        div(class = "from-group")
+            label Old Password:
+            input(
+                class=`form-control${errors && errors.oldPassword ? ' is-invalid' : ''}`
+                id = 'oldPassword'
+                name = 'oldPassword'
+                placeholder = 'Old Password'
+                type = 'password'
+                value = values && values.oldPassword ? values.oldPassword : ''
+            )
+            if errors && errors.oldPassword
+                div(class='invalid-feedback') #{errors.oldPassword}
+
+        div(class = "from-group")
+            label New Password:
+            input(
+                class=`form-control${errors && errors.newPassword ? ' is-invalid' : ''}`
+                id = 'newPassword'
+                name = 'newPassword'
+                placeholder = 'New Password'
+                type = 'password'
+                value = values && values.newPassword ? values.newPassword : ''
+            )
+            if errors && errors.newPassword
+                div(class='invalid-feedback') #{errors.newPassword}
+
+        div(class = "d-flex justify-content-between mt-4")
+            input(
+                type = "submit"
+                name = "action"
+                value = "Update Profile"
+                class = "form-control btn btn-success mt-2"
+            )
+
+            input(
+                type = "reset"
+                value = "Reset"
+                class = "form-control btn btn-info mt-2"
+            )
+
+            input(
+                type = "submit"
+                name = "action"
+                value = "Delete Account"
+                class = "form-control btn btn-danger mt-2"
+            )
